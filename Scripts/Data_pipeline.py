@@ -97,10 +97,12 @@ def data_pipeline(file_path, db_name, table_name, csv_name, folder):
     print("Data pipeline completed successfully!")
 
 # usage
-file_path = 'solar_energy_data.csv'  # Or 'solar_energy_data.xlsx'
+file_path = 'powerbox_dataset_prototype.csv'  # Or 'solar_energy_data.xlsx'
 db_name = 'solar_system.db'
 table_name = 'cleaned_solar_data'
 csv_name = 'cleaned_solar_data.csv'
-folder = 'Cleaned_data'
+folder = '/Users/habeeb/Downloads/Git/ML/Powerbox/Clean_data'
 
 data_pipeline(file_path, db_name, table_name, csv_name, folder)
+
+
