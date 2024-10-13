@@ -8,8 +8,7 @@ This project aims to develop a solar + wind powered **PowerBox** that can power 
 
 This project builds on the results of engagement with an existing prototype created from past research development works. Feedback from engagement includes the need for increased power output without losing the affordability factor and a more practical body design.
 
-## Dasboard
-[Download PowerBox Demonstration Video](path/to/your/screenstudio_video.mp4)
+
 ## Repository Structure
 
 The repository is structured as follows:
