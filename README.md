@@ -12,6 +12,13 @@ This project builds on the results of engagement with an existing prototype crea
 
 The repository is structured as follows:
 
+### Directory Descriptions
+
+- **Clean_data/**: This folder contains the processed datasets that have been cleaned and are ready for analysis or visualization.
+- **Dashboard/**: This directory holds the interactive dashboard application built with Dash, which visualizes the processed data.
+- **Exploration/**: Contains Jupyter notebooks or scripts for exploring and analyzing the raw data.
+- **Raw_data/**: This folder is where the original, unprocessed data files are stored.
+- **Scripts/**: This contains Python scripts used for data processing, cleaning, and preparing the data for analysis.
 
 ## Steps to Replicate and Run the Project
 
@@ -23,20 +30,3 @@ Clone the repository to your local machine using the following command:
 
 ```bash
 git clone https://github.com/yourusername/PowerBox.git
-
-
-'''bash
-cd PowerBox
-
-
-python -m venv venv
-source venv/bin/activate  # On Windows use `venv\Scripts\activate`
-
-pip install -r requirements.txt
-
-
-# Change to the Dashboard directory
-cd Dashboard
-
-# Run the dashboard
-python dashboard.py  
