@@ -4,7 +4,7 @@ import pandas as pd
 from .ML import PowerConsumptionPredictor
 from typing import List
 
-app = FastAPI(title="Power Consumption Prediction API")
+app = FastAPI(title="PowerBox Prediction API")
 
 # Initialize the predictor and load the model
 try:
