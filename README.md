@@ -4,6 +4,7 @@ A machine learning service for predicting power consumption patterns using FastA
 
 ## Project Structure
 
+```
 powerbox/
 ├── ML_powerbox_data/
 │   ├── __init__.py
