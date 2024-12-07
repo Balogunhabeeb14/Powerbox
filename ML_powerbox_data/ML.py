@@ -96,8 +96,20 @@ class PowerConsumptionPredictor:
 
     def load_model(self, model_dir='models'):
         """Load the trained model and scaler"""
-        self.model = joblib.load(f'{model_dir}/power_consumption_model.joblib')
-        self.scaler = joblib.load(f'{model_dir}/scaler.joblib')
+        try:
+            model_path = f'{model_dir}/power_consumption_model.joblib'
+            scaler_path = f'{model_dir}/scaler.joblib'
+            
+            if not os.path.exists(model_path) or not os.path.exists(scaler_path):
+                print("Warning: Model files not found. Please train the model first.")
+                return False
+            
+            self.model = joblib.load(model_path)
+            self.scaler = joblib.load(scaler_path)
+            return True
+        except Exception as e:
+            print(f"Error loading model: {str(e)}")
+            return False
 
     def predict(self, input_data):
         """Make predictions on new data"""
@@ -138,9 +150,9 @@ def main():
     # Initialize predictor
     predictor = PowerConsumptionPredictor()
     
-    # Train and save model
+    # Train and save modeli
     metrics, X_test, y_test, y_pred = predictor.train_model(
-        '/workspaces/Powerbox/ETL/Raw_data/Powerbox/Clean_data/cleaned_solar_data.csv'
+        '/Users/habeeb/Downloads/Git/ML/Powerbox/ETL/Raw_data/Powerbox/Clean_data/cleaned_solar_data.csv'
     )
     
     # Print metrics

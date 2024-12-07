@@ -1,14 +1,19 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import pandas as pd
-from ML import PowerConsumptionPredictor
+from .ML import PowerConsumptionPredictor
 from typing import List
 
 app = FastAPI(title="Power Consumption Prediction API")
 
 # Initialize the predictor and load the model
-predictor = PowerConsumptionPredictor()
-predictor.load_model()
+try:
+    predictor = PowerConsumptionPredictor()
+    predictor.load_model()
+except Exception as e:
+    print(f"Error loading model: {str(e)}")
+    # Initialize predictor without loading model for development
+    predictor = PowerConsumptionPredictor()
 
 class PredictionInput(BaseModel):
     temperature: float
