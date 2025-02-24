@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/6b8ae4228bc74b5db3188240fe7c3c7c/artifacts
+end_time: 1737912324036
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 6b8ae4228bc74b5db3188240fe7c3c7c
+run_name: colorful-mare-528
+run_uuid: 6b8ae4228bc74b5db3188240fe7c3c7c
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1737911164254
+status: 3
+tags: []
+user_id: codespace

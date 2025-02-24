@@ -41,33 +41,32 @@ def check_if_file_processed(directory_path, file_path):
     return False  # No match found
 
 
-# Step 1: Ingest Data
-def ingest_data(file_path,archive_dir):
-    
-    if (file_path.endswith('.csv')) | (file_path.endswith('.xlsx')) :
-        #Rename the file by adding the date
+def ingest_data(file_path, archive_dir):
+    if (file_path.endswith('.csv')) | (file_path.endswith('.xlsx')):
         directory = os.path.dirname(file_path)
         file_name = os.path.basename(file_path)
-        today=datetime.datetime.now().strftime("%Y%m%d")
-        file_name_date= file_name.split('.')[0]+"_"+today+'.'+file_name.split('.')[1]
-
+        today = datetime.datetime.now().strftime("%Y%m%d")
+        file_name_date = file_name.split('.')[0] + "_" + today + '.' + file_name.split('.')[1]
+        
+        # Check if the directory exists before changing
+        if not os.path.exists(directory):
+            raise FileNotFoundError(f"Directory {directory} does not exist.")
+        
         os.chdir(directory)
-        os.rename(file_name,file_name_date)
-        
-        #Check if the file is alredy processed 
+        os.rename(file_name, file_name_date)
+
         filecheck = check_if_file_processed(archive_dir, file_name_date)
-        
-        if filecheck == True:
-            raise ValueError("File {} already processed.".format(file_name))
-    
-           
+        if filecheck:
+            raise ValueError(f"File {file_name} already processed.")
+
         if file_name_date.endswith('.csv'):
             df = pd.read_csv(file_name_date)
         elif file_name_date.endswith('.xlsx'):
             df = pd.read_excel(file_name_date)
     else:
         raise ValueError("Unsupported file format. Please provide a CSV or Excel file.")
-    return df,file_name_date
+    
+    return df, file_name_date
     
 # Step 2: Validate the file - schema check
 def validate_dataframe_columns(dataframe, csv_file_path):
@@ -92,6 +91,47 @@ def validate_dataframe_columns(dataframe, csv_file_path):
     else:
         print("Columns are valid and match the expected structure.")
 
+# Step 2.1: Correct Data Types
+def correct_data_types(df):
+    """
+    Correct the data types for the dataset to ensure consistency.
+    """
+    try:
+        df['Timestamp'] = pd.to_datetime(df['Timestamp'], errors='coerce', dayfirst=True)  # Convert to datetime
+        df['System ON'] = df['System ON'].astype(bool)
+        df['Temperature (°C)'] = df['Temperature (°C)'].astype(float)
+        df['Solar Panels Energy Output (W)'] = df['Solar Panels Energy Output (W)'].astype(float)
+        df['Power Consumption (kW)'] = df['Power Consumption (kW)'].astype(float)
+        df['Energy Stored in Batteries (kWh)'] = df['Energy Stored in Batteries (kWh)'].astype(float)
+        df['Inverter Efficiency (%)'] = df['Inverter Efficiency (%)'].astype(float)
+        df['System Load (kW)'] = df['System Load (kW)'].astype(float)
+        df['System Fault Alerts'] = df['System Fault Alerts'].astype(bool)
+        df['Voltage (V)'] = df['Voltage (V)'].astype(float)
+        df['Current (A)'] = df['Current (A)'].astype(float)
+        df['Power Factor'] = df['Power Factor'].astype(float)
+        df['Dust and Dirt Accumulation (g/m²)'] = df['Dust and Dirt Accumulation (g/m²)'].astype(float)
+        df['Battery Low Flag'] = df['Battery Low Flag'].astype(bool)
+        df['Battery Full Flag'] = df['Battery Full Flag'].astype(bool)
+        df['Customer Profile'] = df['Customer Profile'].astype('category')
+        df['User Coordinates'] = df['User Coordinates'].astype(str)  # Keep as string for later processing
+        df['Solar Panels Type'] = df['Solar Panels Type'].astype('category')
+        df['Solar Panels Configuration'] = df['Solar Panels Configuration'].astype('category')
+        df['Depth of Discharge'] = df['Depth of Discharge'].str.rstrip('%').astype(float) / 100  # Convert percentage to float
+        df['Battery Capacity (Wh)'] = df['Battery Capacity (Wh)'].astype(float)
+        df['Inverter Capacity (kW)'] = df['Inverter Capacity (kW)'].astype(float)
+        df['Battery Technology'] = df['Battery Technology'].astype('category')
+        
+        # Split coordinates into Latitude and Longitude
+        df[['Latitude', 'Longitude']] = df['User Coordinates'].str.split(',', expand=True).astype(float)
+        
+        # Drop the original 'User Coordinates' column
+        df.drop(columns=['User Coordinates'], inplace=True)
+        
+        print("Data types corrected successfully.")
+        return df
+    
+    except Exception as e:
+        raise ValueError(f"Error correcting data types: {e}")
 
 # Step 3: Drop columns with missingness > 50%
 def drop_high_missingness(df, threshold=0.5):
@@ -188,6 +228,9 @@ def data_pipeline(file_path, db_name, table_name, csv_name, schema_file, archive
     
     # Step 2: Validate the file 
     validate_dataframe_columns(df, schema_file)
+
+    # Step 2.1: Correct data types
+    df = correct_data_types(df)
     
     # Step 3: Drop columns with high missingness
     df = drop_high_missingness(df)
@@ -210,12 +253,16 @@ def data_pipeline(file_path, db_name, table_name, csv_name, schema_file, archive
     print("Data pipeline completed successfully!")
 
   
-file_path = './powerbox_dataset_prototype.csv'  # Or 'solar_energy_data.xlsx'
-db_name = 'solar_system.db'
-table_name = 'cleaned_solar_data'
-csv_name = 'cleaned_solar_data.csv'
-folder = './Powerbox/Clean_data/'
-schema_file = 'powerbox_schema.csv'
-archive_dir = './Powerbox/archive/'
+# Main Execution Block
+if __name__ == "__main__":
+    # Define parameters
+    file_path = 'ETL/Raw_data/powerbox_dataset_prototype_20241205.csv'  # Path to raw input data
+    db_name = 'solar_system.db'                               # Database name
+    table_name = 'cleaned_solar_data'                         # Table name in SQLite
+    csv_name = 'cleaned_solar_data.csv'                       # Name for cleaned data CSV
+    folder = './Powerbox/Clean_data/'                         # Folder to save cleaned data
+    schema_file = 'powerbox_schema.csv'                       # Schema file for validation
+    archive_dir = './Powerbox/archive/'                       # Archive folder for input files
 
-data_pipeline(file_path, db_name, table_name, csv_name,schema_file,archive_dir, folder)
+    # Run the pipeline
+    data_pipeline(file_path, db_name, table_name, csv_name, schema_file, archive_dir, folder)

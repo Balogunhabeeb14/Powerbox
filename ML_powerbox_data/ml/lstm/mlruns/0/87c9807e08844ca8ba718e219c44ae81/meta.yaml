@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/87c9807e08844ca8ba718e219c44ae81/artifacts
+end_time: 1737924496296
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 87c9807e08844ca8ba718e219c44ae81
+run_name: nebulous-calf-943
+run_uuid: 87c9807e08844ca8ba718e219c44ae81
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1737924119336
+status: 3
+tags: []
+user_id: codespace

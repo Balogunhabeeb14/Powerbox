@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/78013b8678fd4a1c9c5ed84c5aa65235/artifacts
+end_time: 1737924844666
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 78013b8678fd4a1c9c5ed84c5aa65235
+run_name: sassy-lark-151
+run_uuid: 78013b8678fd4a1c9c5ed84c5aa65235
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1737924496307
+status: 3
+tags: []
+user_id: codespace
