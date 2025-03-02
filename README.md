@@ -7,14 +7,7 @@ A machine learning service for predicting power consumption patterns using FastA
 ```
 powerbox/
 
-├── ML_Opensource_data/ #Opensource data we early sourced that looks mimicks Nigeria features like weathers etc
-│   ├── Prophet #facebook prophet model
-│   ├── arima          # arima statistical model
-│   └── lightGBM       # lightgbm model
-│   └── SARIMAX       #  SARIMAX model
-│   └── xgboost       # xgboost model
-│   └── script       # script to try the different model
-├── ML_powerbox_data/ #data gotten from the actual powerbox unit and used for development and deployment using FAST
+├── ML/ #data gotten from the actual powerbox unit and used for development and deployment using FAST
 │   ├── __init__.py
 │   ├── api.py          # FastAPI endpoints for predictions
 │   └── ML.py           # ML model and prediction logic
